@@ -10,6 +10,10 @@ public class App {
 
         // Create the Flyway instance
         Flyway flyway = new Flyway();
+        flyway.setBaselineOnMigrate(true);
+
+        String tenantNamespace = "10000";
+        ConnectionFactory.setupDataSource(flyway, tenantNamespace);
 
         // Point it to the database
         flyway.setDataSource("jdbc:h2:file:./target/foobar", "sa", null);
