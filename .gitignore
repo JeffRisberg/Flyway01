@@ -1,0 +1,10 @@
+/target
+/build
+/gradle
+
+.idea/tasks.xml
+.idea/workspace.xml
+.idea/dbnavigator.xml
+.idea/libraries
+
+
