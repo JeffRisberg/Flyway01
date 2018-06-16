@@ -15,8 +15,8 @@ public class App {
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
 
-        String tenantNamespace = "10000";
-        ConnectionFactory.setupDataSource(flyway, tenantNamespace);
+        String namespace = "10000";
+        ConnectionFactory.setupDataSource(flyway, namespace);
 
         Map<String, String> properties = new HashMap<String, String>();
 
@@ -28,7 +28,7 @@ public class App {
         flyway.configure(properties);
 
         // Point it to the database
-        //flyway.setDataSource("jdbc:h2:file:./target/foobar", "sa", null);
+        flyway.setDataSource("jdbc:mysql://localhost:3306/flyway01?autoreconnect=true", "developer", "123456");
 
         // Start the migration
         flyway.migrate();

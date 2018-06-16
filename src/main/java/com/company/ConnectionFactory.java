@@ -2,28 +2,24 @@ package com.company;
 
 import org.flywaydb.core.Flyway;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ConnectionFactory {
 
-    private final static String TENANTSTORE_DRIVER = "aisera.framework.tenantstore.driver";
-    private final static String TENANTSTORE_URL = "aisera.framework.tenantstore.url";
-    private final static String TENANTSTORE_USER = "aisera.framework.tenantstore.user";
-    private final static String TENANTSTORE_SECRET = "aisera.framework.tenantstore.secret";
-
-    private final static String DEFAULT_URL = "jdbc:mariadb://localhost:3306/tenant_store";
-    private final static String DEFAULT_BASE_URL = "jdbc:mariadb://localhost:3306";
-    private final static String DEFAULT_USER = "aiserauser";
-    private final static String DEFAULT_SECRET = "aiserapassword";
+    private final static String DEFAULT_URL = "jdbc:mysql://localhost:3306/flyway01";
+    private final static String DEFAULT_BASE_URL = "jdbc:mysql://localhost:3306";
+    private final static String DEFAULT_USER = "developer";
+    private final static String DEFAULT_SECRET = "123456";
 
     public static Connection getConnection() throws SQLException {
 
-        ResourceLocator.registerProperties(
-                ConnectionFactory.class.getResourceAsStream("/config/aisera_tenantstore.properties"));
-
-        String url = ResourceLocator.getResource(TENANTSTORE_URL).orElse(DEFAULT_URL);
-        String user = ResourceLocator.getResource(TENANTSTORE_USER).orElse(DEFAULT_USER);
-        String secret = ResourceLocator.getResource(TENANTSTORE_SECRET).orElse(DEFAULT_SECRET);
+        String url = DEFAULT_URL;
+        String user = DEFAULT_USER;
+        String secret = DEFAULT_SECRET;
         return DriverManager.getConnection(url, user, secret);
     }
 
@@ -41,11 +37,12 @@ public class ConnectionFactory {
 
     /**
      * Flyway needs access to the db
+     *
      * @param flyway
      */
     public static void setupDataSource(Flyway flyway, String tenantNamespace) {
         flyway.setDataSource(DEFAULT_BASE_URL + "/" + tenantNamespace,
-                ResourceLocator.getResource(TENANTSTORE_USER).orElse(DEFAULT_USER),
-                ResourceLocator.getResource(TENANTSTORE_SECRET).orElse(DEFAULT_SECRET));
+                DEFAULT_USER,
+                DEFAULT_SECRET);
     }
 }
