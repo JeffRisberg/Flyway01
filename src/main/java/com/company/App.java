@@ -1,6 +1,7 @@
 package com.company;
 
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.internal.sqlscript.FlywaySqlScriptException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +16,8 @@ public class App {
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
 
-        String tenantNamespace = "10000";
-        ConnectionFactory.setupDataSource(flyway, tenantNamespace);
+        String namespace = "10000";
+        ConnectionFactory.setupDataSource(flyway, namespace);
 
         Map<String, String> properties = new HashMap<String, String>();
 
@@ -25,13 +26,18 @@ public class App {
         properties.put("flyway.user", "developer");
         properties.put("flyway.password", "123456");
 
-        flyway.configure(properties);
+        //flyway.configure(properties);
 
         // Point it to the database
-        //flyway.setDataSource("jdbc:h2:file:./target/foobar", "sa", null);
+        flyway.setDataSource("jdbc:mysql://localhost:3306/flyway01?autoreconnect=true", "developer", "123456");
 
-        // Start the migration
-        flyway.migrate();
+        try {
+            // Start the migration
+            flyway.migrate();
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+        }
     }
 }
 
